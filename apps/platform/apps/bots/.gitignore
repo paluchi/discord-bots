@@ -64,5 +64,9 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# Ignore all .env files
 .env
+.env.*
+
+# Except .env.example
+!.env.example
