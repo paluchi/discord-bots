@@ -1,0 +1,35 @@
+{
+  "name": "platform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:watch": "run-p build:watch:background",
+    "build:watch:background": "run-p build:watch:background:onNewSale",
+    "build:watch:background:onNewSale": "cd services/background/onNewSale && npm run build:watch",
+    "build": "run-p build:background",
+    "build:background": "run-p build:background:onNewSale",
+    "build:background:onNewSale": "cd services/background/onNewSale && npm run build",
+    "emulate": "firebase emulators:start --only functions,pubsub",
+    "dev:back": "run-p build:background && run-p build:watch emulate",
+    "deploy": "./deploy.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "chokidar-cli": "^3.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "8",
+    "firebase-tools-with-isolate": "^13.11.2",
+    "inquirer": "^9.3.4",
+    "ts-node": "^10.0.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}

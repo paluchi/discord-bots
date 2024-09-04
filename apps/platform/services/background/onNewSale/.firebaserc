@@ -1,0 +1,11 @@
+{
+  "projects": {
+    "default": "discord-community-dev",
+    "dev": "discord-community-dev",
+    "staging": "",
+    "prod": ""
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@platform/bots",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "initialize-salespoint": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/salesPointInitializer/index.ts' --",
+    "onboarding-bot": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/onboarding/chats/index.ts' --",
+    "tickets-bot": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/salesTickets/chats/index.ts' --"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/secret-manager": "^5.6.0",
+    "@platform/adapters": "workspace:*",
+    "@platform/core": "workspace:*",
+    "@platform/database": "workspace:*",
+    "@platform/shared": "workspace:*",
+    "@platform/shared-context": "workspace:*",
+    "discord.js": "^14.16.1",
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^12.2.0",
+    "firebase-functions": "^5.0.1",
+    "fireorm": "^0.23.3",
+    "install": "^0.13.0",
+    "redis": "^4.6.15",
+    "stripe": "^16.2.0",
+    "ts-node-dev": "^2.0.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/redis": "^4.0.11",
+    "@types/uuid": "^10.0.0",
+    "tsconfig-paths": "^4.2.0"
+  }
+}

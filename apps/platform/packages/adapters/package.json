@@ -1,0 +1,19 @@
+{
+  "name": "@platform/adapters",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/storage": "^7.12.0",
+    "@platform/core": "workspace:*",
+    "@platform/database": "workspace:*",
+    "@platform/shared": "workspace:*",
+    "firebase-admin": "^12.2.0",
+    "fireorm": "^0.23.3",
+    "googleapis": "^144.0.0",
+    "stripe": "^16.2.0"
+  }
+}

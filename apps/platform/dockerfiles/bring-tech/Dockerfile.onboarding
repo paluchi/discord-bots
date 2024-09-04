@@ -1,0 +1,23 @@
+# Use an official Node.js runtime as the base image
+FROM node:18-alpine
+
+# Install Redis
+RUN apk add --no-cache redis
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy the package.json and package-lock.json from the root directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of your application code from the root directory
+COPY . ./
+
+# Expose the port on which your bot will run (if applicable)
+# EXPOSE 3000
+
+# Start Redis server and run the bot
+CMD ["sh", "-c", "redis-server --daemonize yes && npm run onboarding .env.bring_tech"]

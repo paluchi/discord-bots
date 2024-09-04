@@ -1,0 +1,11 @@
+{
+  "projects": {
+    "default": "adults-site-dev",
+    "dev": "adults-site-dev",
+    "staging": "",
+    "prod": "adults-site-prod"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

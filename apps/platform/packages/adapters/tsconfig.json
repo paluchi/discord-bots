@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2020",
+    "composite": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@platform/core/*": ["../core/src/*"],
+      "@platform/database/*": ["../database/src/*"]
+    }
+  },
+  "compileOnSave": true,
+  "include": ["src"],
+  "references": [{ "path": "../core" }, { "path": "../database" }]
+}
