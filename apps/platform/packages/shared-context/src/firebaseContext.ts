@@ -73,19 +73,21 @@ const createRepositories = () => {
 
   const salesmanRepository = new SalesmanRepository(salesmanFbRepository);
   const clientRepository = new ClientRepository(clientFbRepository);
+  const catalogueRepository = new CatalogueRepository(
+    catalogueFbRepository,
+    productFbRepository,
+    envs.CATALOGUE_ID
+  );
 
   return {
     salesmanRepository: salesmanRepository,
     salesRepository: new SalesRepository(
       salesFbRepository,
+      catalogueRepository,
       clientRepository,
       salesmanRepository
     ),
-    catalogueRepository: new CatalogueRepository(
-      catalogueFbRepository,
-      productFbRepository,
-      envs.CATALOGUE_ID
-    ),
+    catalogueRepository: catalogueRepository,
     clientRepository: clientRepository,
     backofficeCatalogueRepository: new BackofficeCatalogueRepository({
       catalogueId: envs.CATALOGUE_ID,

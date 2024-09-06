@@ -5,6 +5,7 @@ import {
   ChannelType,
   Events,
   GuildChannel,
+  Interaction,
   PermissionsBitField,
   TextChannel,
 } from "discord.js";
@@ -79,8 +80,11 @@ export async function startSalesTicketListener() {
       }
     });
 
-    client.on(Events.InteractionCreate, async (interaction: any) => {
+    client.on(Events.InteractionCreate, async (interaction: Interaction) => {
       if (!interaction.isButton()) return;
+
+      // Check if custom ID is the one we're expecting
+      if (interaction.customId !== "create_ticket_button") return;
 
       const openSalesChannels = await getOpenSalesChannelsBySalesman(
         interaction.user.id,
@@ -109,7 +113,7 @@ export async function startSalesTicketListener() {
           );
 
           // Create a new array for channel permissions, starting with category permissions
-          const channelPermissions = [...categoryPermissions];
+          const channelPermissions: any = [...categoryPermissions];
 
           // Add specific permission for the user who clicked the button
           channelPermissions.push({

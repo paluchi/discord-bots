@@ -4,6 +4,7 @@ import {
   GuildChannel,
   NewsChannel,
   TextChannel,
+  ThreadChannel,
 } from "discord.js";
 import { MessageResolver } from "./MessageResolver";
 import { FlowExecutor } from "./FlowExecutor";
@@ -19,6 +20,7 @@ interface DiscordListenerOptions {
   channelId?: string | null;
   categoryId?: string | null;
   channelCreateCallback?: (channel: CustomChannel, client: Client) => void;
+  threadCreateCallback?: (channel: CustomChannel, client: Client) => void;
 }
 
 export class DiscordListener {
@@ -28,7 +30,11 @@ export class DiscordListener {
   private channelId: string | null;
   private categoryId: string | null;
   private stateManager: StateManager;
-  private channelCreateCallback: (
+  private channelCreateCallback?: (
+    channel: TextChannel | NewsChannel,
+    client: Client
+  ) => void;
+  private threadCreateCallback?: (
     channel: TextChannel | NewsChannel,
     client: Client
   ) => void;
@@ -39,13 +45,15 @@ export class DiscordListener {
     stateManager,
     channelId = null,
     categoryId = null,
-    channelCreateCallback = () => {},
+    channelCreateCallback,
+    threadCreateCallback,
   }: DiscordListenerOptions) {
     this.client = client;
     this.flowExecutor = flowExecutor;
     this.channelId = channelId;
     this.categoryId = categoryId;
     this.channelCreateCallback = channelCreateCallback;
+    this.threadCreateCallback = threadCreateCallback;
     this.stateManager = stateManager;
 
     this.messageResolver = new MessageResolver(stateManager);
@@ -54,8 +62,12 @@ export class DiscordListener {
   start(): void {
     this.client.on("messageCreate", this.handleMessage.bind(this));
 
-    if (this.categoryId) {
+    if (this.categoryId && this.channelCreateCallback) {
       this.client.on("channelCreate", this.handleChannelCreate.bind(this));
+    }
+
+    if (this.channelId && this.threadCreateCallback) {
+      this.client.on("threadCreate", this.handleThreadCreate.bind(this));
     }
 
     console.info("DiscordListener started");
@@ -67,11 +79,7 @@ export class DiscordListener {
     const channel = message.channel;
 
     // If it's a category listener and a message is sent in to a channel NOT in the category then ignore
-    if (
-      this.categoryId &&
-      channel instanceof GuildChannel &&
-      channel.parentId !== this.categoryId
-    )
+    if (this.categoryId && (channel as any).parentId !== this.categoryId)
       return;
 
     // Only process messages in the specified channel
@@ -117,7 +125,22 @@ export class DiscordListener {
     // Check if the channel is a TextChannel or NewsChannel
     if (channel.isTextBased()) {
       // Execute the callback passing the client
-      this.channelCreateCallback(channel as CustomChannel, this.client);
+      this.channelCreateCallback!(channel as CustomChannel, this.client);
+    } else {
+      console.warn("Channel is not a TextChannel or NewsChannel");
+    }
+  }
+
+  private async handleThreadCreate(channel: ThreadChannel): Promise<void> {
+    console.log("Thread created");
+
+    // Only process threads created in the specified channel
+    if (this.channelId && channel.parentId !== this.channelId) return;
+
+    // Check if the channel is a TextChannel or NewsChannel
+    if (channel.isTextBased()) {
+      // Execute the callback passing the client
+      this.threadCreateCallback!(channel as any, this.client);
     } else {
       console.warn("Channel is not a TextChannel or NewsChannel");
     }

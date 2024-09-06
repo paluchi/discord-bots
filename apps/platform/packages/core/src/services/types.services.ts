@@ -47,7 +47,7 @@ export interface SaleData
     Sale,
     "id" | "createDate" | "status" | "products" | "salesman" | "client"
   > {
-  products: Omit<SaleProduct, "id">[];
+  products: Omit<SaleProduct, "id" | "productDetails">[];
   salesmanId: string;
   clientId: string;
 }

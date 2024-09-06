@@ -1,6 +1,7 @@
 import getDiscordChatApp from "@platform/shared-context/bots/getChatApp";
+import { ChatApp } from "@platform/shared/framework/ChatApp";
 
-let chatApp: any;
+let chatApp: ChatApp;
 
 export const getChatApp = async () => {
   if (chatApp) return chatApp;

@@ -1,11 +1,13 @@
 import { z } from "zod";
 import { SalesmanSchema } from "./salesman";
 import { ClientSchema } from "./client";
+import { ProductSchema } from "./catalogue";
 
 const SaleProductSchema = z.object({
   id: z.string(),
   productId: z.string(),
   amount: z.number(),
+  productDetails: ProductSchema,
 });
 
 const SaleStatusSchema = z.enum(["pending", "completed", "cancelled"]);

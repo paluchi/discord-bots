@@ -5,7 +5,8 @@
   "scripts": {
     "initialize-salespoint": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/salesPointInitializer/index.ts' --",
     "onboarding-bot": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/onboarding/chats/index.ts' --",
-    "tickets-bot": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/salesTickets/chats/index.ts' --"
+    "tickets-bot": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/salesTickets/chats/index.ts' --",
+    "backoffice-tickets-bot": "sh -c 'ENVIRONMENTS_FILE_PATH=${1:-} ts-node-dev --respawn --transpile-only -r tsconfig-paths/register ./src/backofficeSalesTickets/chats/index.ts' --"
   },
   "author": "",
   "license": "ISC",

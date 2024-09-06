@@ -10,10 +10,13 @@ export type Bot = keyof typeof bots;
 
 let chatApp: ChatApp;
 
-const getChatApp = async (bot: Bot): Promise<ChatApp> => {
+const getChatApp = async (
+  bot: Bot,
+  omitChatContext: boolean = false
+): Promise<ChatApp> => {
   if (chatApp) return chatApp;
 
-  chatApp = new ChatApp(bots[bot]);
+  chatApp = new ChatApp(bots[bot], omitChatContext);
   await chatApp.init();
   return chatApp;
 };

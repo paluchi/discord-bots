@@ -10,18 +10,19 @@ interface ListenerProps {
   channelId?: string | null;
   categoryId?: string | null;
   channelCreateCallback?: (channel: CustomChannel, client: Client) => void;
+  threadCreateCallback?: (channel: CustomChannel, client: Client) => void;
   timeoutCallback: (req: Request, sendMessage: MessageSend) => void;
   startPoint: ChatMiddleware;
 }
 
 export class ChatApp {
   private client: Client;
-  private stateManager: StateManager;
+  private stateManager: StateManager | null = null;
   private listeners: DiscordListener[] = [];
   private discordToken: string;
 
-  constructor(discordToken: string) {
-    this.stateManager = new StateManager();
+  constructor(discordToken: string, omitStateManager: boolean = false) {
+    if (!omitStateManager) this.stateManager = new StateManager();
     this.discordToken = discordToken;
 
     this.client = new Client({
@@ -41,7 +42,7 @@ export class ChatApp {
   }
 
   async init() {
-    await this.stateManager.init();
+    await this.stateManager?.init();
     await this.client.login(this.discordToken);
   }
 
@@ -54,6 +55,8 @@ export class ChatApp {
   }
 
   addListener(props: ListenerProps) {
+    if (!this.stateManager) throw new Error("StateManager is not initialized");
+
     if (!props.channelId && !props.categoryId) {
       throw new Error(
         "Invalid listener arguments: channelId or categoryId must be provided"
@@ -84,6 +87,7 @@ export class ChatApp {
       channelId: props.channelId,
       categoryId: props.categoryId,
       channelCreateCallback: props.channelCreateCallback as any,
+      threadCreateCallback: props.threadCreateCallback as any,
     });
 
     this.listeners.push(discordListener);

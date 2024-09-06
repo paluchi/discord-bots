@@ -5,7 +5,7 @@ import {
   ChannelType,
 } from "discord.js";
 import { getChatApp } from "./utils/chatApp";
-import { getBackofficeCatalogueService } from "./utils/firebaseContext";
+import { getBackofficeCatalogueService } from "@platform/shared-context/firebaseContext";
 import {
   roles as domainRoles,
   Role,

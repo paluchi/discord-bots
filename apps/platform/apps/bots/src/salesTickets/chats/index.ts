@@ -7,12 +7,18 @@ import {
   getCatalogueService,
   getClientService,
   getSalesService,
-} from "@/utils/firebaseContext";
+} from "@platform/shared-context/firebaseContext";
 import { pickUserWithRole } from "@/utils/pickUserWithRole";
 import { Catalogue, Category } from "@platform/core/domain/catalogue";
 import { TextChannel } from "discord.js";
 import { Client } from "@platform/core/domain/client";
 import { Sale } from "@platform/core/domain/sale";
+import {
+  calculateFinalCost,
+  calculateFinalShippingCost,
+  calculateTotalCommission,
+  calculateTotalPoints,
+} from "@/utils/saleCalculations";
 
 interface ClientData {
   name: string;
@@ -407,18 +413,33 @@ async function main() {
             }
 
             const productNameByProductId = (id: string) => products![id].name;
-            await res.send(`A continuacion, el resumen de tu venta:
-- Codigo de seguimiento: ${saleRes.sale!.id}
-- Vendedor: ${req.user.tag}
-- Cliente: ${saleRes.sale!.client.id}
-- Productos:\n
-${saleRes.sale!.products.map(
-  (product) =>
-    `   _ ${product.amount} x ${productNameByProductId(product.productId)}`
-)}
-- Estado: ${saleRes.sale!.status}
-- Fecha de creacion: ${saleRes.sale!.createDate}
-              `);
+            await res.send(`A continuación, el resumen de tu venta:
+
+              **Código de seguimiento**: \`${saleRes.sale!.id}\`
+              
+              **Vendedor**: \`${req.user.tag}\`
+              
+              **Cliente**: \`${saleRes.sale!.client.id}\`
+              
+              **Productos**:${saleRes
+                .sale!.products.map(
+                  (product) =>
+                    `  - ${product.amount} x **${productNameByProductId(product.productId)}**`
+                )
+                .join("\n")}
+              
+                
+              **Estado**: \`${saleRes.sale!.status}\`
+              
+              **Fecha de creación**: \`${new Date(saleRes.sale!.createDate).toLocaleString()}\`
+              
+              **Puntos totales**: \`${calculateTotalPoints(saleRes.sale!)}\`
+              
+              **Comisión total**: \`${calculateTotalCommission(saleRes.sale!)}\`
+              
+              **Costo de envío final**: \`${calculateFinalShippingCost(saleRes.sale!)}\`
+              
+              **Costo final**: \`${calculateFinalCost(saleRes.sale!)}\``);
 
             return { success: true, ticket: saleRes.sale };
           } catch (error) {
@@ -443,7 +464,10 @@ ${saleRes.sale!.products.map(
 
       (req.originChannel as TextChannel).setTopic(channelTopicsMap.processing);
       await res.send("Ya estamos trabajando para procesar tu venta!\n");
-      const pickedManager = await pickUserWithRole(req, "Sales-Manager");
+      const pickedManager = await pickUserWithRole({
+        request: req,
+        roleName: "Sales-Manager",
+      });
       if (pickedManager)
         await res.send(
           `${pickedManager.tag} es el manager de ventas asignado a tu ticket y estará disponible para responder a todas tus dudas. Pueden utilizar este canal para comunicarse directamente.`

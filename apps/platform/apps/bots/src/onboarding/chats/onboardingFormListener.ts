@@ -2,7 +2,7 @@ import { getChatApp } from "./shared/chatApp";
 import envs from "@platform/shared/env";
 import { Next, Request, Response } from "@platform/shared/framework/types";
 import { trackProgress } from "@/utils/trackProgress";
-import { getSalesmanService } from "@/utils/firebaseContext";
+import { getSalesmanService } from "@platform/shared-context/firebaseContext";
 import { Salesman } from "@platform/core/domain/salesman";
 
 export async function onboardingFormListener() {

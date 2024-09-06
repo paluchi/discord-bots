@@ -6,7 +6,7 @@ let chatApp: ChatApp;
 export const getChatApp = async () => {
   if (chatApp) return chatApp;
 
-  chatApp = await getDiscordChatApp("ONBOARDING_BOT");
+  chatApp = await getDiscordChatApp("BACKOFFICE_SALES_TICKETS_BOT");
   await chatApp.init();
   return chatApp;
 };

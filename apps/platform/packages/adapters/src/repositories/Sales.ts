@@ -8,18 +8,22 @@ import {
 import SaleModel, { FirestoreSale } from "@platform/database/models/Sale";
 import { BaseFirestoreRepository } from "fireorm";
 import { parseToDate, parseToFirestoreTimestamp } from "./utils";
+import CatalogueRepository from "./Catalogue";
 
 export class SalesRepository implements ISalesRepository {
   private saleRepository: BaseFirestoreRepository<SaleModel>;
+  private catalogueRepository: CatalogueRepository;
   private clientRepository: ClientRepository;
   private salesmanRepository: SalesmanRepository;
 
   constructor(
     saleRepository: BaseFirestoreRepository<SaleModel>,
+    catalogueRepository: CatalogueRepository,
     clientRepository: ClientRepository,
     salesmanRepository: SalesmanRepository
   ) {
     this.saleRepository = saleRepository;
+    this.catalogueRepository = catalogueRepository;
     this.clientRepository = clientRepository;
     this.salesmanRepository = salesmanRepository;
   }
@@ -104,7 +108,18 @@ export class SalesRepository implements ISalesRepository {
   private async mapToDomain(firestoreSale: FirestoreSale): Promise<Sale> {
     let products: SaleProduct[] = [];
     if (firestoreSale.products) {
-      products = await firestoreSale.products.find();
+      const saleProducts = await firestoreSale.products.find();
+      products = await Promise.all(
+        saleProducts.map(async (product) => {
+          const productDetails = await this.catalogueRepository.getProductById(
+            product.productId
+          );
+          return {
+            ...product,
+            productDetails: productDetails!,
+          };
+        })
+      );
     }
 
     const client = await this.clientRepository.findById(firestoreSale.clientId);

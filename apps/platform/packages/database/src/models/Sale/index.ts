@@ -7,7 +7,7 @@ import {
 import { firestore } from "firebase-admin";
 import { Sale, SaleProduct, SaleStatus } from "@platform/core/domain/sale";
 
-class SaleProductModel implements SaleProduct {
+class SaleProductModel implements Omit<SaleProduct, "productDetails"> {
   id!: string;
   productId!: string;
   amount!: number;

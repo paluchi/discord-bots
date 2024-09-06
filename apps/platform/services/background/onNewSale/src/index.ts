@@ -12,7 +12,8 @@ export const onNewSale = functions.firestore
       const newSaleData = snap.data();
 
       const backofficeSaleschatApp = await getChatApp(
-        "BACKOFFICE_SALES_TICKETS_BOT"
+        "BACKOFFICE_SALES_TICKETS_BOT",
+        true
       );
       const backofficeSalesClient = backofficeSaleschatApp.getClient();
 
