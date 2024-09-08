@@ -2,7 +2,7 @@
   "source": ".",
   "functions": [
     {
-      "source": "./services/background/on-new-sale",
+      "source": "./services/background/onNewSale",
       "codebase": "background_on-new-sale",
       "runtime": "nodejs20",
       "ignore": ["node_modules", ".git", "*.local"],
@@ -10,8 +10,8 @@
       "isolate": true
     },
     {
-      "source": "./services/background/test",
-      "codebase": "background_test",
+      "source": "./services/background/onSaleStatusUpdate",
+      "codebase": "background_on_sale_status_update",
       "runtime": "nodejs20",
       "ignore": ["node_modules", ".git", "*.local"],
       "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"],
@@ -27,14 +27,15 @@
   },
   "emulators": {
     "ui": {
-      "host": "192.168.0.102",
       "enabled": true,
       "port": 4000
     },
     "firestore": {
+      "enabled": true,
       "port": 8080
     },
     "functions": {
+      "enabled": true,
       "port": 5000
     },
     "auth": {

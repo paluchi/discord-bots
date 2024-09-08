@@ -13,6 +13,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  Message,
 } from "discord.js";
 import envs from "../env";
 
@@ -180,14 +181,18 @@ export class FlowExecutor {
     }
   }
 
-  private async send(channelId: string, message: string): Promise<void> {
+  private async send(
+    channelId: string,
+    message: string
+  ): Promise<Message | null> {
     const channel = await this.discordClient.channels.fetch(channelId);
     if (channel && channel.isTextBased()) {
-      await (channel as TextChannel).send(message);
+      return await (channel as TextChannel).send(message);
     } else {
       console.error(
         `Channel with ID ${channelId} not found or is not a text channel.`
       );
+      return null;
     }
   }
 

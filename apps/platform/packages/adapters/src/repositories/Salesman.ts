@@ -31,6 +31,19 @@ export class SalesmanRepository implements ISalesmanRepository {
     throw new Error("Not implemented");
   }
 
+  public async sumPoints(userId: string, points: number): Promise<void> {
+    // Run transaction to sum points
+    await this.salesmanRepository.runTransaction(async (transaction) => {
+      const salesman = await transaction.findById(userId);
+      if (!salesman) throw new Error(`Salesman with id ${userId} not found`);
+
+      await transaction.update({
+        points: salesman.points + points,
+        id: userId,
+      });
+    });
+  }
+
   public async block(userId: string): Promise<void> {
     throw new Error("Not implemented");
   }

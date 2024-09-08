@@ -15,6 +15,15 @@ class CatalogueService implements ICatalogueService {
     return this.catalogueRepository.getFullCatalogue();
   }
 
+  async addStock(
+    products: {
+      productId: string;
+      amount: number;
+    }[]
+  ): Promise<void> {
+    this.catalogueRepository.addStock(products);
+  }
+
   async getProductsByCategory(categoryId: string): Promise<Product[]> {
     throw new Error("Not implemented");
   }

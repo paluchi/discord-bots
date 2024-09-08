@@ -5,7 +5,13 @@ import {
   getRepository,
 } from "fireorm";
 import { firestore } from "firebase-admin";
-import { Sale, SaleProduct, SaleStatus } from "@platform/core/domain/sale";
+import {
+  Sale,
+  SaleDetails,
+  SaleProduct,
+  SaleStatus,
+  SaleTransactionalStatus,
+} from "@platform/core/domain/sale";
 
 class SaleProductModel implements Omit<SaleProduct, "productDetails"> {
   id!: string;
@@ -23,14 +29,25 @@ export interface FirestoreSale
   clientId: string;
 }
 
+class FirebaseSaleDetails implements SaleDetails {
+  salesmanCommunicationGatewayId?: string;
+  backofficeCommunicationMethod?: "discord-thread";
+  backofficeCommunicationGatewayId?: string;
+  processVersion?: number;
+  backofficeCancelReason?: string;
+  backofficeUpdateRequest?: string;
+  salesmanUpdateRequest?: string;
+}
+
 @Collection("sales")
 export class SaleModel implements FirestoreSale {
   id!: string;
   createDate!: firestore.Timestamp;
   salesmanId!: string;
   status!: SaleStatus;
+  transactionalStatus!: SaleTransactionalStatus;
   resolutionDate?: string;
-  details!: Record<string, any>;
+  details!: FirebaseSaleDetails;
   clientId!: string;
 
   @SubCollection(SaleProductModel, "products")

@@ -1,0 +1,20 @@
+{
+  "functions": [
+    {
+      "friendlyName": "onSaleStatusUpdate",
+      "source": ".",
+      "runtime": "nodejs20",
+      "isolate": true,
+      "predeploy": ["turbo build"],
+      "codebase": "background_on_sale_status_update"
+    }
+  ],
+  "emulators": {
+    "ui": {
+      "enabled": true
+    },
+    "functions": {
+      "port": 5000
+    }
+  }
+}

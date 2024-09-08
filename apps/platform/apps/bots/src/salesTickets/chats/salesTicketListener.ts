@@ -11,7 +11,10 @@ import {
 } from "discord.js";
 import { getChatApp } from "../shared/chatApp";
 import envs from "@platform/shared/env";
+import { getSalesService } from "@platform/shared-context/firebaseContext";
 
+// TODO - Implement the function to get the open sales channels by salesman
+// Below method is not working as expected
 const getOpenSalesChannelsBySalesman = async (
   userId: string,
   guild: any
@@ -60,7 +63,7 @@ export async function startSalesTicketListener() {
           }
 
           const button = new ButtonBuilder()
-            .setCustomId("create_ticket_button")
+            .setCustomId("create-ticket-button")
             .setLabel("Abrir nuevo ticket de venta")
             .setStyle(ButtonStyle.Primary)
             .setEmoji("📩");
@@ -80,28 +83,34 @@ export async function startSalesTicketListener() {
       }
     });
 
+    type InteractionId = "create-ticket-button" | "close-salesman-ticket";
+
     client.on(Events.InteractionCreate, async (interaction: Interaction) => {
       if (!interaction.isButton()) return;
 
+      const interactionId = interaction.customId as InteractionId;
+
       // Check if custom ID is the one we're expecting
-      if (interaction.customId !== "create_ticket_button") return;
-
-      const openSalesChannels = await getOpenSalesChannelsBySalesman(
-        interaction.user.id,
-        interaction.guild
-      );
-
-      if (openSalesChannels >= 30) {
-        await interaction.reply({
-          content: `⚠️ Alcanzaste el límite de tickets abiertos al mismo tiempo (${openSalesChannels}). Contacta a un moderador si necesitas ayuda o crees que es un error.`,
-          ephemeral: true,
-        });
+      if (
+        interactionId !== "close-salesman-ticket" &&
+        interactionId !== "create-ticket-button"
+      )
         return;
-      }
 
-      const { customId } = interaction;
+      if (interactionId === "create-ticket-button") {
+        const openSalesChannels = await getOpenSalesChannelsBySalesman(
+          interaction.user.id,
+          interaction.guild
+        );
 
-      if (customId === "create_ticket_button") {
+        if (openSalesChannels >= 30) {
+          await interaction.reply({
+            content: `⚠️ Alcanzaste el límite de tickets abiertos al mismo tiempo (${openSalesChannels}). Contacta a un moderador si necesitas ayuda o crees que es un error.`,
+            ephemeral: true,
+          });
+          return;
+        }
+
         const category = interaction.guild!.channels.cache.get(
           envs.OPEN_SALES_CATEGORY_ID
         );
@@ -139,6 +148,35 @@ export async function startSalesTicketListener() {
             ephemeral: true,
           });
         }
+      } else if (interactionId === "close-salesman-ticket") {
+        await interaction.deferReply({ ephemeral: true }); // Defer reply to avoid timeout
+
+        // Get pinned messages
+        const pinnedMessages =
+          await interaction.channel!.messages.fetchPinned();
+
+        // Get first pinned message
+        // From first pinned message, get the sales ID by splitting the content by ":" and getting the second part
+        const saleId = pinnedMessages.first()?.content.split(":")[1].trim()!;
+
+        // Get interaction channel
+        const channel = interaction.channel as TextChannel;
+
+        const salesService = await getSalesService();
+
+        await salesService.updateSale(saleId, {
+          transactionalStatus: "ticket-archived",
+        });
+
+        await interaction.editReply({
+          content: "Cerrando ticket...",
+        });
+
+        // Await 7 seconds
+        await new Promise((resolve) => setTimeout(resolve, 7000));
+
+        // Delete the channel
+        await channel.delete();
       }
     });
   } catch (error) {

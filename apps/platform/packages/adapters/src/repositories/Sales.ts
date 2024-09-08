@@ -29,6 +29,8 @@ export class SalesRepository implements ISalesRepository {
   }
 
   async getSaleById(id: string): Promise<Sale> {
+    console.log(this.saleRepository);
+
     const sale = await this.saleRepository.findById(id);
     if (!sale) throw new Error(`Sale with id ${id} not found`);
     return this.mapToDomain(sale);

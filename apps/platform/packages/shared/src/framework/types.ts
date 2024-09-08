@@ -22,7 +22,7 @@ export interface RequestDataResponse {
 }
 
 export interface Response {
-  send: (message: string) => Promise<void>;
+  send: (message: string) => Promise<Message | null>;
   requestData: (message?: string) => Promise<RequestDataResponse>;
   askForInput: (expectedInput: {
     text?: string;

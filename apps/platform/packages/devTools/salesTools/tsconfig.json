@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "lib": ["ES2020", "DOM"],
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@platform/core/*": ["../../../packages/core/src/*"],
+      "@domain/*": ["../../../packages/core/src/domain/*"],
+      "@core/*": ["../../../packages/core/src/domain/*"],
+      "@platform/adapters/*": ["../../../packages/adapters/src/*"],
+      "@platform/database/*": ["../../../packages/database/src/*"],
+      "@platform/shared/*": ["../../../packages/shared/src/*"],
+      "@platform/shared-context/*": ["../../../packages/shared-context/src/*"]
+    }
+  },
+  "ts-node": { "esm": true },
+  "compileOnSave": true,
+  "include": ["src"],
+  "references": [
+    { "path": "../../../packages/core" },
+    { "path": "../../../packages/adapters" },
+    { "path": "../../../packages/database" },
+    { "path": "../../../packages/shared" },
+    { "path": "../../../packages/shared-context" }
+  ]
+}

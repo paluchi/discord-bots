@@ -37,7 +37,7 @@ export async function startSalesTicketListener() {
           }
 
           const button = new ButtonBuilder()
-            .setCustomId("create_ticket_button")
+            .setCustomId("create-ticket-button")
             .setLabel("Abrir nuevo ticket de venta")
             .setStyle(ButtonStyle.Primary)
             .setEmoji("📩");
@@ -61,7 +61,7 @@ export async function startSalesTicketListener() {
 
       const { customId } = interaction;
 
-      if (customId === "create_ticket_button") {
+      if (customId === "create-ticket-button") {
         const category = interaction.guild!.channels.cache.get(
           envs.OPEN_SALES_CATEGORY_ID
         );

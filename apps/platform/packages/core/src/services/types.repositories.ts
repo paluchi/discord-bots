@@ -61,6 +61,7 @@ export type RepositoryOnboardingUserDetails = Omit<
 export interface SalesmanRepository {
   onboard(userDetails: RepositoryOnboardingUserDetails): Promise<void>;
   offboard(userId: string): Promise<void>;
+  sumPoints(userId: string, points: number): Promise<void>;
   block(userId: string): Promise<void>;
   unblock(userId: string): Promise<void>;
   getUserDetails(userId: string): Promise<Salesman | null>;

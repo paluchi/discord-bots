@@ -1,6 +1,6 @@
 import getDiscordRolesMap, { Member } from "./getDiscordRolesMap";
-import { Request } from "@platform/shared/framework/types";
-import { Role } from "@platform/core/services/types.services";
+import { Request } from "../framework/types";
+import { Role } from "@platform/core/src/services/types.services";
 import { Client } from "discord.js";
 
 const pickUserWithRole = async (props: {

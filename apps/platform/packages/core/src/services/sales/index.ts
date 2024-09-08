@@ -1,4 +1,4 @@
-import { Sale } from "../../domain/sale";
+import { Sale, salesTransactionalStatuses } from "../../domain/sale";
 import { SalesService as ISalesService, SaleData } from "../types.services";
 import {
   AddStockError,
@@ -49,9 +49,9 @@ export class SalesService implements ISalesService {
         ...saleData,
         details: {
           ...(saleData.details || {}),
-          "backoffice-communicated": false,
         },
-        status: "pending",
+        status: "processing",
+        transactionalStatus: salesTransactionalStatuses.sendBackofficeMessage,
         createDate: new Date(),
       } as any;
 

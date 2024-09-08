@@ -67,9 +67,9 @@ done < <(find . -name firebase.json -print0)
 # Display deployment options using whiptail
 selected_options=$(select_options "Deployment Options" "Choose options to deploy (use space to toggle, enter to confirm)" "${options[@]}")
 
-# Check if user cancelled
+# Check if user canceled
 if [ $? -ne 0 ]; then
-  echo "Selection cancelled. Exiting."
+  echo "Selection canceled. Exiting."
   exit 1
 fi
 

@@ -2,7 +2,7 @@ import * as fireorm from "fireorm";
 import envs from "@platform/shared/env";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import SalesmanService from "@platform/core/services/onboarding";
+import SalesmanService from "@platform/core/services/salesman";
 import CatalogueService from "@platform/core/services/catalogue";
 import { getSalesmanFirebaseReposository } from "@platform/database/models/Salesman";
 import { SalesmanRepository } from "@platform/adapters/repositories/Salesman";

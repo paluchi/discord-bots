@@ -138,8 +138,8 @@ export function sendModal(
                   "Collector ended without receiving any items" ||
                 error.code === "INTERACTION_COLLECTOR_ERROR"
               ) {
-                // Modal was cancelled, closed, or the X button was clicked
-                console.log("Modal was cancelled or closed");
+                // Modal was canceled, closed, or the X button was clicked
+                console.log("Modal was canceled or closed");
                 resolve(null);
               } else if (error.message === "Modal timed out") {
                 interaction

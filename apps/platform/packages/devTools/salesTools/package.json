@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "upload": "pnpm run build && node ./dist/index.js"
+    "gen-sale": "pnpm run build && node ./dist/onNewSale/index.js",
+    "update-sale": "pnpm run build && node ./dist/onSaleStatusUpdate/index.js"
   },
   "license": "MIT",
   "dependencies": {

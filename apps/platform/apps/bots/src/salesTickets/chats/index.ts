@@ -8,7 +8,7 @@ import {
   getClientService,
   getSalesService,
 } from "@platform/shared-context/firebaseContext";
-import { pickUserWithRole } from "@/utils/pickUserWithRole";
+import { pickUserWithRole } from "@platform/shared/discordUtils/pickUserWithRole";
 import { Catalogue, Category } from "@platform/core/domain/catalogue";
 import { TextChannel } from "discord.js";
 import { Client } from "@platform/core/domain/client";
@@ -18,7 +18,7 @@ import {
   calculateFinalShippingCost,
   calculateTotalCommission,
   calculateTotalPoints,
-} from "@/utils/saleCalculations";
+} from "@platform/shared/saleCalculations";
 
 interface ClientData {
   name: string;
@@ -379,7 +379,7 @@ async function main() {
               clientId: client!.clientId,
               details: {
                 processVersion: 1,
-                discordChannelId: req.originChannel.id,
+                salesmanCommunicationGatewayId: req.originChannel.id,
               },
               products: Object.values(products!).map((product) => ({
                 productId: product.id,
@@ -411,6 +411,9 @@ async function main() {
                 markTrackerAsFailed: true,
               };
             }
+
+            const idMsg = await res.send(`~ID:${saleRes.sale!.id}`);
+            idMsg!.pin();
 
             const productNameByProductId = (id: string) => products![id].name;
             await res.send(`A continuación, el resumen de tu venta:

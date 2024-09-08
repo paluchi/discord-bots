@@ -25,6 +25,7 @@ export interface CatalogueService {
   getCategories(): { name: string }[];
   getProductsByCategory(categoryName: string): Product[];
   checkStock(productName: string, amount: number): boolean;
+  addStock(productName: string, amount: number): void;
 }
 
 export type UserDetails = Omit<
@@ -34,6 +35,7 @@ export type UserDetails = Omit<
 export interface SalesmanService {
   onboard(userId: string, userDetails: UserDetails): Promise<void>;
   offboard(userId: string): Promise<void>;
+  sumPoints(userId: string, points: number): Promise<void>;
   block(userId: string): Promise<void>;
   unblock(userId: string): Promise<void>;
   getUserDetails(userId: string): Promise<Salesman | null>;
@@ -45,7 +47,13 @@ export interface SalesmanService {
 export interface SaleData
   extends Omit<
     Sale,
-    "id" | "createDate" | "status" | "products" | "salesman" | "client"
+    | "id"
+    | "createDate"
+    | "status"
+    | "transactionalStatus"
+    | "products"
+    | "salesman"
+    | "client"
   > {
   products: Omit<SaleProduct, "id" | "productDetails">[];
   salesmanId: string;

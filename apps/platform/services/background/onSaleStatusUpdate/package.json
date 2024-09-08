@@ -1,0 +1,54 @@
+{
+  "name": "@platform/on-sale-status-update",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "dist",
+    ".env.*"
+  ],
+  "scripts": {
+    "type:check": "tsc --noEmit",
+    "build": "tsup-node",
+    "build:watch": "chokidar 'src/**/*.ts' '../../../packages/**/*' --ignore 'dist/**' --ignore '../../../packages/devTools/**/*'  -c 'npm run build'",
+    "emulate": "pnpm run build & firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "@google-cloud/secret-manager": "^5.6.0",
+    "@platform/adapters": "workspace:*",
+    "@platform/core": "workspace:*",
+    "@platform/database": "workspace:*",
+    "@platform/shared": "workspace:*",
+    "@platform/shared-context": "workspace:*",
+    "body-parser": "^1.20.2",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "discord.js": "^14.16.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.12.2",
+    "firebase-admin": "^12.2.0",
+    "firebase-functions": "^5.0.1",
+    "fireorm": "^0.23.3",
+    "firestore-server-utils": "1.0.0-7",
+    "googleapis": "^144.0.0",
+    "install": "^0.13.0",
+    "redis": "^4.6.15",
+    "reflect-metadata": "^0.2.2",
+    "sharp": "^0.33.4",
+    "stripe": "^16.2.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "firebase-tools-with-isolate": "^13.11.2"
+  }
+}

@@ -28,6 +28,10 @@ class SalesmanService implements ISalesmanService {
     await this.salesmanRepository.onboard(user);
   }
 
+  async sumPoints(userId: string, points: number): Promise<void> {
+    this.salesmanRepository.sumPoints(userId, points);
+  }
+
   async offboard(userId: string): Promise<void> {
     throw new Error("Not implemented");
   }

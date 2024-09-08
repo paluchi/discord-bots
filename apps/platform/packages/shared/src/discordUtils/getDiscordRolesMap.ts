@@ -1,5 +1,5 @@
-import { Role } from "@platform/core/services/types.services";
-import { Request } from "@platform/shared/framework/types";
+import { Role } from "@platform/core/src/services/types.services";
+import { Request } from "../framework/types";
 import { Client, Guild, GuildMember } from "discord.js";
 
 export interface Member {

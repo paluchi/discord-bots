@@ -6,4 +6,10 @@ export interface CatalogueService {
   checkProductStock(productId: string): Promise<number>;
   getCategoryDetails(categoryId: string): Promise<Category>;
   getProductDetails(productId: string): Promise<Product>;
+  addStock(
+    products: {
+      productId: string;
+      amount: number;
+    }[]
+  ): Promise<void>;
 }
