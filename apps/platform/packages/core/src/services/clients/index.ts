@@ -17,6 +17,21 @@ class ClientService implements IClientService {
       createDate: new Date(),
     });
   }
+
+  async findById(id: string): Promise<Client> {
+    return this.clientsRepository.findById(id);
+  }
+
+  async findClientsBySalesmanId(salesmanId: string): Promise<Client[]> {
+    return this.clientsRepository.findClientsBySalesmanId(salesmanId);
+  }
+
+  async updateClient(
+    id: string,
+    clientData: Partial<Omit<Client, "id" | "createDate">>
+  ): Promise<Client> {
+    return this.clientsRepository.updateClient(id, clientData);
+  }
 }
 
 export default ClientService;

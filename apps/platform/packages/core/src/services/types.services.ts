@@ -70,4 +70,10 @@ export interface SalesService {
 // Interface for ClientService
 export interface ClientService {
   createClient(clientData: Omit<Client, "id" | "createDate">): Promise<Client>;
+  findById(clientId: string): Promise<Client>;
+  findClientsBySalesmanId(salesmanId: string): Promise<Client[]>;
+  updateClient(
+    clientId: string,
+    clientData: Partial<Omit<Client, "id" | "createDate">>
+  ): Promise<Client>;
 }

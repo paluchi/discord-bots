@@ -211,11 +211,99 @@ importers:
         specifier: ^5.5.3
         version: 5.5.3
 
+  apps/platform/packages/devTools/salesTools:
+    dependencies:
+      '@google-cloud/functions-framework':
+        specifier: ^3.4.0
+        version: 3.4.0
+      '@google-cloud/secret-manager':
+        specifier: ^5.6.0
+        version: 5.6.0(encoding@0.1.13)
+      '@platform/adapters':
+        specifier: workspace:*
+        version: link:../../adapters
+      '@platform/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@platform/database':
+        specifier: workspace:*
+        version: link:../../database
+      '@platform/shared':
+        specifier: workspace:*
+        version: link:../../shared
+      '@platform/shared-context':
+        specifier: workspace:*
+        version: link:../../shared-context
+      body-parser:
+        specifier: ^1.20.2
+        version: 1.20.2
+      compression:
+        specifier: ^1.7.4
+        version: 1.7.4
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.5
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
+      firebase:
+        specifier: ^10.12.2
+        version: 10.12.2
+      firebase-admin:
+        specifier: ^12.2.0
+        version: 12.2.0(encoding@0.1.13)
+      firebase-functions:
+        specifier: ^5.0.1
+        version: 5.0.1(firebase-admin@12.2.0(encoding@0.1.13))
+      fireorm:
+        specifier: ^0.23.3
+        version: 0.23.3(reflect-metadata@0.2.2)
+      firestore-server-utils:
+        specifier: 1.0.0-7
+        version: 1.0.0-7(firebase-admin@12.2.0(encoding@0.1.13))
+      install:
+        specifier: ^0.13.0
+        version: 0.13.0
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      stripe:
+        specifier: ^16.2.0
+        version: 16.2.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/body-parser':
+        specifier: ^1.19.5
+        version: 1.19.5
+      '@types/compression':
+        specifier: ^1.7.5
+        version: 1.7.5
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.17
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      firebase-tools-with-isolate:
+        specifier: ^13.11.2
+        version: 13.11.2(encoding@0.1.13)
+      ts-node-dev:
+        specifier: ^2.0.0
+        version: 2.0.0(@types/node@20.14.10)(typescript@5.5.3)
+
   apps/platform/packages/shared:
     dependencies:
       '@google-cloud/secret-manager':
         specifier: ^5.6.0
         version: 5.6.0(encoding@0.1.13)
+      '@platform/core':
+        specifier: workspace:*
+        version: link:../core
       discord.js:
         specifier: ^14.16.1
         version: 14.16.1
@@ -376,6 +464,103 @@ importers:
         version: 13.11.2(encoding@0.1.13)
 
   apps/platform/services/background/onNewSale:
+    dependencies:
+      '@google-cloud/functions-framework':
+        specifier: ^3.4.0
+        version: 3.4.0
+      '@google-cloud/secret-manager':
+        specifier: ^5.6.0
+        version: 5.6.0(encoding@0.1.13)
+      '@platform/adapters':
+        specifier: workspace:*
+        version: link:../../../packages/adapters
+      '@platform/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@platform/database':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@platform/shared':
+        specifier: workspace:*
+        version: link:../../../packages/shared
+      '@platform/shared-context':
+        specifier: workspace:*
+        version: link:../../../packages/shared-context
+      body-parser:
+        specifier: ^1.20.2
+        version: 1.20.2
+      compression:
+        specifier: ^1.7.4
+        version: 1.7.4
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.5
+      discord.js:
+        specifier: ^14.16.1
+        version: 14.16.1
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
+      firebase:
+        specifier: ^10.12.2
+        version: 10.12.2
+      firebase-admin:
+        specifier: ^12.2.0
+        version: 12.2.0(encoding@0.1.13)
+      firebase-functions:
+        specifier: ^5.0.1
+        version: 5.0.1(firebase-admin@12.2.0(encoding@0.1.13))
+      fireorm:
+        specifier: ^0.23.3
+        version: 0.23.3(reflect-metadata@0.2.2)
+      firestore-server-utils:
+        specifier: 1.0.0-7
+        version: 1.0.0-7(firebase-admin@12.2.0(encoding@0.1.13))
+      googleapis:
+        specifier: ^144.0.0
+        version: 144.0.0(encoding@0.1.13)
+      install:
+        specifier: ^0.13.0
+        version: 0.13.0
+      redis:
+        specifier: ^4.6.15
+        version: 4.6.15
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      sharp:
+        specifier: ^0.33.4
+        version: 0.33.4
+      stripe:
+        specifier: ^16.2.0
+        version: 16.2.0
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/body-parser':
+        specifier: ^1.19.5
+        version: 1.19.5
+      '@types/compression':
+        specifier: ^1.7.5
+        version: 1.7.5
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.17
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      firebase-tools-with-isolate:
+        specifier: ^13.11.2
+        version: 13.11.2(encoding@0.1.13)
+
+  apps/platform/services/background/onSaleStatusUpdate:
     dependencies:
       '@google-cloud/functions-framework':
         specifier: ^3.4.0

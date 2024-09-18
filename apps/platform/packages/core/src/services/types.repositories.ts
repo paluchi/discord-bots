@@ -86,4 +86,9 @@ export interface SalesRepository {
 export interface ClientRepository {
   createClient(clientData: Omit<Client, "id">): Promise<Client>;
   findById(id: string): Promise<Client>;
+  findClientsBySalesmanId(salesmanId: string): Promise<Client[]>;
+  updateClient(
+    id: string,
+    clientData: Partial<Omit<Client, "id" | "createDate">>
+  ): Promise<Client>;
 }

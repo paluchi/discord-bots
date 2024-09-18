@@ -26,6 +26,24 @@ export class ClientRepository implements IClientRepository {
     return this.mapToDomain(client);
   }
 
+  public async findClientsBySalesmanId(salesmanId: string): Promise<Client[]> {
+    const clients = await this.clientRepository
+      .whereEqualTo("salesmanId", salesmanId)
+      .find();
+    return clients.map(this.mapToDomain);
+  }
+
+  public async updateClient(
+    id: string,
+    clientData: Partial<Omit<Client, "id" | "createDate">>
+  ): Promise<Client> {
+    const client = await this.clientRepository.update({
+      id,
+      ...(clientData as any),
+    });
+    return this.mapToDomain(client);
+  }
+
   private mapToDomain(client: ClientModel): Client {
     return {
       ...client,
