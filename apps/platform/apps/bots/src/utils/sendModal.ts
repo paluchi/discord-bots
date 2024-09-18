@@ -7,7 +7,7 @@ import {
   TextInputStyle,
 } from "discord.js";
 
-interface ModalField {
+export interface ModalField {
   customId: string;
   label: string;
   style: TextInputStyle;
@@ -44,6 +44,7 @@ export function sendModal(
       confirmText,
       timeout = 5 * 60 * 1000,
     } = config;
+
     try {
       const modal = new ModalBuilder().setCustomId(customId).setTitle(title);
 
@@ -70,7 +71,6 @@ export function sendModal(
           modal.addComponents(actionRow);
         });
       } else {
-        // If no fields are provided, add a hidden field for confirmation
         const confirmField = new TextInputBuilder()
           .setCustomId("confirm")
           .setLabel(confirmText || "Confirm this action?")
@@ -92,7 +92,7 @@ export function sendModal(
 
           interaction
             .awaitModalSubmit({ filter, time: timeout })
-            .then((modalInteraction) => {
+            .then(async (modalInteraction) => {
               const result: ModalResult = {};
               const inputs = modalInteraction.fields;
 
@@ -104,32 +104,29 @@ export function sendModal(
                     if (!checkRes || typeof checkRes === "string") {
                       const errorText =
                         typeof checkRes === "string" ? checkRes : "";
-                      modalInteraction
-                        .reply({
-                          content: `❌ El campo '${field.label}' es inválido.\n${errorText}`,
-                          ephemeral: true,
-                        })
-                        .catch(() => null);
+                      await modalInteraction.reply({
+                        content: `❌ El campo '${field.label}' es inválido.\n${errorText}`,
+                        ephemeral: true,
+                      });
                       return resolve(null);
                     }
                   }
                   result[field.customId] = input;
                 }
               } else {
-                // For confirmation-only modals
                 result.confirm = inputs.getTextInputValue("confirm");
               }
 
-              modalInteraction
-                .reply({
-                  content: "✅️ Formulario enviado con exito!",
-                  ephemeral: true,
-                })
-                .then(() => resolve(result))
-                .catch((error) => {
-                  console.error("Error replying to modal submission:", error);
-                  resolve(result); // Still resolve with the result even if reply fails
-                });
+              // Step 1: Acknowledge the interaction first
+              await modalInteraction.deferUpdate(); // Acknowledge the modal submission
+
+              // Step 2: Reply after acknowledgment
+              await modalInteraction.followUp({
+                content: "✅️ Formulario enviado con éxito!",
+                ephemeral: true,
+              });
+
+              resolve(result);
             })
             .catch((error) => {
               console.log("error", error);
@@ -138,7 +135,6 @@ export function sendModal(
                   "Collector ended without receiving any items" ||
                 error.code === "INTERACTION_COLLECTOR_ERROR"
               ) {
-                // Modal was canceled, closed, or the X button was clicked
                 console.log("Modal was canceled or closed");
                 resolve(null);
               } else if (error.message === "Modal timed out") {

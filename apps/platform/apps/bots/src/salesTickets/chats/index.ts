@@ -9,7 +9,7 @@ import {
   getSalesService,
 } from "@platform/shared-context/firebaseContext";
 import { pickUserWithRole } from "@platform/shared/discordUtils/pickUserWithRole";
-import { Catalogue, Category } from "@platform/core/domain/catalogue";
+import { Category } from "@platform/core/domain/catalogue";
 import { TextChannel } from "discord.js";
 import { Client } from "@platform/core/domain/client";
 import { Sale } from "@platform/core/domain/sale";
@@ -19,33 +19,8 @@ import {
   calculateTotalCommission,
   calculateTotalPoints,
 } from "@platform/shared/saleCalculations";
-
-interface ClientData {
-  name: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  addressNotes: string;
-  clientId: string;
-  salesmanId: string;
-}
-interface ChatData {
-  client?: ClientData;
-  products?: {
-    [key: string]: {
-      id: string;
-      amount: number;
-      name: string;
-    };
-  };
-  catalogue?: Catalogue;
-}
-
-const channelTopicsMap = {
-  initiated: "INITIATED",
-  processing: "PROCESSING",
-  closed: "CLOSED",
-};
+import { onChannelCreate } from "./ticketUtils";
+import { channelTopicsMap, ChatData, ClientData } from "./ticketUtils/types";
 
 const askForClientDataValidation = async (
   req: Request,
@@ -486,14 +461,8 @@ async function main() {
     chatApp.addListener({
       categoryId: envs.OPEN_SALES_CATEGORY_ID,
       startPoint: chatStarterMiddleware,
-      channelCreateCallback: async (channel) => {
-        // Set the channel topic to initiated
-        await channel.setTopic(channelTopicsMap.initiated);
-
-        // Send Welcome message to the channel
-        channel.send(
-          "Parece que hiciste una venta! Envia un mensaje para registrarla."
-        );
+      channelCreateCallback: async (channel: any) => {
+        onChannelCreate(channel);
       },
       timeoutCallback: async (req, sendMessage) => {
         await sendMessage(
