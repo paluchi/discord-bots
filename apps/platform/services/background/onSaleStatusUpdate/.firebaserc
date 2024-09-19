@@ -3,7 +3,7 @@
     "default": "discord-community-dev",
     "dev": "discord-community-dev",
     "staging": "",
-    "prod": ""
+    "prod": "discord-community-prod"
   },
   "targets": {},
   "etags": {},

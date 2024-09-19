@@ -22,3 +22,23 @@ This monorepo allows you to:
   development, ensuring seamless integration with Firebase Emulator Suite.
 - **Flexibility**: Designed to be flexible and adaptable to meet any project
   needs.
+
+  ## Run dockerfile
+
+  docker build --platform linux/amd64 -t <dockerhub_username>/<project>_<bot_name>:<version> -f apps/platform/dockerfiles/<project>/Dockerfile.<bot_name> .
+  <!-- docker build --platform linux/amd64 -t gonzandrelli3410/bring-tech_onboarding:1.0.6 -f apps/platform/dockerfiles/bring-tech/Dockerfile.onboarding . -->
+  <!-- docker build --platform linux/amd64 -t gonzandrelli3410/bring-tech_tickets:1.0.1 -f apps/platform/dockerfiles/bring-tech/Dockerfile.tickets . -->
+  <!-- docker build --platform linux/amd64 -t gonzandrelli3410/bring-tech_backoffice:1.0.1 -f apps/platform/dockerfiles/bring-tech/Dockerfile.backoffice . -->
+
+  docker run -d --name <bot_name> <image_id>
+
+  to upload:
+  docker tag <image_id> <dockerhub_username>/<project>_<bot_name>:<version>
+  <!-- docker tag 010ebea561aa gonzandrelli3410/bring-tech_onboarding:1.0.6 -->
+  <!-- docker tag 010ebea561aa gonzandrelli3410/bring-tech_tickets:1.0.1 -->
+  <!-- docker tag 010ebea561aa gonzandrelli3410/bring-tech_backoffice:1.0.1 -->
+  docker push <dockerhub_username>/<project>_<bot_name>:<version>
+  <!-- docker push gonzandrelli3410/bring-tech_onboarding:1.0.6 -->
+  <!-- docker push gonzandrelli3410/bring-tech_tickets:1.0 -->
+  <!-- docker push gonzandrelli3410/bring-tech_backoffice:1.0 -->
+

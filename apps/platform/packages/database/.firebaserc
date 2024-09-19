@@ -1,9 +1,9 @@
 {
   "projects": {
-    "default": "adults-site-dev",
-    "dev": "adults-site-dev",
+    "default": "discord-community-dev",
+    "dev": "discord-community-dev",
     "staging": "",
-    "prod": "adults-site-prod"
+    "prod": "discord-community-prod"
   },
   "targets": {},
   "etags": {},

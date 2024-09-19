@@ -4,6 +4,7 @@ import { Next, Request, Response } from "@platform/shared/framework/types";
 import { trackProgress } from "@/utils/trackProgress";
 import { getSalesmanService } from "@platform/shared-context/firebaseContext";
 import { Salesman } from "@platform/core/domain/salesman";
+import { roles } from "@platform/core/services/types.services";
 
 export async function onboardingFormListener() {
   const welcomeMiddleware = async (req: Request, res: Response, next: Next) => {
@@ -213,13 +214,15 @@ export async function onboardingFormListener() {
 
       // Find the "Member" role
       const memberRole = guild.roles.cache.find(
-        (role: any) => role.name === "Member"
+        (role: any) => role.name === roles.Member
+      );
+      const salesmanRole = guild.roles.cache.find(
+        (role: any) => role.name === roles.Salesman
       );
 
-      if (memberRole) {
-        // Add the "Member" role to the user
-        await member.roles.add(memberRole);
-      }
+      // Add the "Member" role to the user
+      if (memberRole) await member.roles.add(memberRole);
+      if (salesmanRole) await member.roles.add(salesmanRole);
     }
   };
 

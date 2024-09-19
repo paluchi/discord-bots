@@ -6,7 +6,9 @@ import {
 } from "@platform/core/domain/backofficeCatalogue";
 import { BackofficeCatalogueRepository as IBackofficeCatalogueRepository } from "@platform/core/services/types.repositories";
 import { BaseFirestoreRepository, ISubCollection } from "fireorm";
-import CatalogueModel, { CategoryModel } from "@platform/database/models/Catalogue";
+import CatalogueModel, {
+  CategoryModel,
+} from "@platform/database/models/Catalogue";
 import { parseToFirestoreTimestamp } from "./utils";
 
 export class BackofficeCatalogueRepository
@@ -74,6 +76,9 @@ export class BackofficeCatalogueRepository
     let currentCategory: BackofficeCategory | null = null;
 
     for (const row of rows) {
+      // If row is empty, skip it
+      if (!row.length) continue;
+
       const rowIndex = rows.indexOf(row);
       const backofficeId = `${rowIndex + 2}`;
       const rowId = idsByRowIndex[rowIndex]!;

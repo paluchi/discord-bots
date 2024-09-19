@@ -18,4 +18,4 @@ RUN pnpm install
 # EXPOSE 3000
 
 # Start Redis server and run the bot
-CMD ["sh", "-c", "redis-server --daemonize yes && cd apps/platform/apps/bots && pnpm run onboarding-bot .env.bring_tech"]
+CMD ["sh", "-c", "redis-server --daemonize yes && cd apps/platform/apps/bots && pnpm run backoffice-tickets-bot .env.bring_tech"]

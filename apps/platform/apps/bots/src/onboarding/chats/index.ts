@@ -4,9 +4,9 @@ import { onboardingFormListener } from "./onboardingFormListener";
 
 async function main() {
   try {
+    await onboardingFormListener();
     newUsersListener();
     newMembersListener();
-    onboardingFormListener();
   } catch (error) {
     console.error("Failed to start the application:", error);
     process.exit(1);
