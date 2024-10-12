@@ -17,6 +17,8 @@ export async function startBackofficeSalesTicketListener() {
     const client = chatApp.getClient();
 
     client.on(Events.InteractionCreate, async (interaction: Interaction) => {
+      if (interaction.guildId !== process.env.SERVER_ID) return;
+
       if (!interaction.isButton()) return;
 
       const id = interaction.customId;

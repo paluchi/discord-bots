@@ -31,7 +31,11 @@ const getZenQuote = async () => {
   }
 };
 
-export const onSaleStatusUpdate = functions.firestore
+
+// onSaleStatusUpdate_BT // bring tech
+// onSaleStatusUpdate_GH // gold hash
+
+export const onSaleStatusUpdate_GH = functions.firestore
   .document("sales/{saleId}")
   .onUpdate(async (change, context) => {
     try {

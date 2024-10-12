@@ -10,6 +10,7 @@ import {
   roles as domainRoles,
   Role,
 } from "@platform/core/services/types.services";
+import envs from "@platform/shared/env";
 
 interface Channel {
   name: string;
@@ -30,9 +31,8 @@ async function main() {
     await backofficeCatalogueService.syncCatalogue();
 
     const chatApp = await getChatApp();
-    const client = await chatApp.getClient();
 
-    const guild = client.guilds.cache.first();
+    const guild = chatApp.getGuild(envs.SERVER_ID);
 
     if (!guild) throw new Error("Guild not found");
 

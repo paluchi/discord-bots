@@ -11,6 +11,8 @@ export async function newUsersListener() {
 
     // Listen for new members joining the server
     client.on(Events.GuildMemberAdd, async (member) => {
+      if (member.guild.id !== process.env.SERVER_ID) return;
+
       console.log(`New user joined: ${member.user.tag}`);
 
       try {

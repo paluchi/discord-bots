@@ -129,8 +129,9 @@ export async function onboardingFormListener() {
         ],
       ],
     });
+    console.log("gender", gender);
 
-    await req.updateChatData({ gender });
+    await req.updateChatData({ gender: gender || "other" });
 
     next(processLastStepsMiddleware);
   };
@@ -182,7 +183,7 @@ export async function onboardingFormListener() {
         async () => {
           // Onboard the user
           const salesmanService = await getSalesmanService();
-          salesmanService.onboard(user.id, formData);
+          await salesmanService.onboard(user.id, formData);
         },
         "Cargando tus datos",
         10000

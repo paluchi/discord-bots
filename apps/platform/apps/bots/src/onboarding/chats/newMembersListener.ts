@@ -10,6 +10,8 @@ export async function newMembersListener() {
 
     // Listen for role updates (when a member gains the "Member" role)
     client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
+      if (oldMember.guild.id !== process.env.SERVER_ID) return;
+
       // Check if the "Member" role was added
       const memberRole = newMember.guild.roles.cache.find(
         (role) => role.name === "Member"

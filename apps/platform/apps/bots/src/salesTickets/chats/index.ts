@@ -58,7 +58,7 @@ const askForClientDataValidation = async (
 - Nombre: ${clientData.name}
 - Telefono: ${clientData.phoneNumber}
 - Email: ${clientData.email}
-- Direccion: ${clientData.email}
+- Direccion: ${clientData.address}
 - Notas: ${clientData.addressNotes || "No hay notas"}\n`
   );
 
@@ -294,7 +294,7 @@ async function main() {
         }
 
         const correctProductRes = await res.booleanQuestion(
-          `Es este el producto correcto?\n\nProducto: ${product?.name}\nDescripcion: ${product?.description}\nPrecio: $${product?.price}\nStock: ${product?.stock}\nComision para vendedor: $${product?.salesmanComission}\nPuntos para vendedor: ${product?.points}\nCosto de envio: $${product?.shippingCost}`
+          `Es este el producto correcto?\n\nProducto: ${product?.name}\nDescripcion: ${product?.description}\nPrecio: $${product?.price}\nStock: ${product?.stock}\nComision para vendedor: $${product?.salesmanComission}\nPuntos para vendedor: ${product?.points}`
         );
 
         if (!correctProductRes) {
@@ -487,13 +487,17 @@ async function main() {
       categoryId: envs.OPEN_SALES_CATEGORY_ID,
       startPoint: chatStarterMiddleware,
       channelCreateCallback: async (channel) => {
-        // Set the channel topic to initiated
-        await channel.setTopic(channelTopicsMap.initiated);
+        try {
+          // Set the channel topic to initiated
+          await channel.setTopic(channelTopicsMap.initiated);
 
-        // Send Welcome message to the channel
-        channel.send(
-          "Parece que hiciste una venta! Envia un mensaje para registrarla."
-        );
+          // Send Welcome message to the channel
+          channel.send(
+            "Parece que hiciste una venta! Envia un mensaje para registrarla."
+          );
+        } catch (error) {
+          console.log("channelCreateCallback error", error);
+        }
       },
       timeoutCallback: async (req, sendMessage) => {
         await sendMessage(

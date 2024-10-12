@@ -7,6 +7,8 @@ dotenv.config({
 });
 
 const envs = {
+  SERVER_ID: process.env.SERVER_ID!,
+
   TICKETS_DISCORD_TOKEN: process.env.TICKETS_DISCORD_TOKEN!,
   OPEN_SALES_CATEGORY_ID: process.env.OPEN_SALES_CATEGORY_ID!,
   SALES_REQUEST_CHANNEL_ID: process.env.SALES_REQUEST_CHANNEL_ID!,

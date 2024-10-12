@@ -6,7 +6,7 @@
       "runtime": "nodejs20",
       "isolate": true,
       "predeploy": ["turbo build"],
-      "codebase": "background_on_sale_status_update"
+      "codebase": "background_on_sale_status_update_gh"
     }
   ],
   "emulators": {

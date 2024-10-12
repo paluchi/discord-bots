@@ -50,6 +50,10 @@ export class ChatApp {
     return this.client;
   }
 
+  getGuild(serverId: string) {
+    return this.client.guilds.cache.get(serverId);
+  }
+
   getStateManager() {
     return this.stateManager;
   }

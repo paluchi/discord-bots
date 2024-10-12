@@ -41,7 +41,7 @@ export async function startSalesTicketListener() {
 
     const client = chatApp.getClient();
 
-    client.once(Events.ClientReady, async () => {
+    client.once(Events.ClientReady, async (client) => {
       // Send the message with the button on bot initialization
       const channel = client.channels.cache.get(
         envs.SALES_REQUEST_CHANNEL_ID
@@ -58,7 +58,7 @@ export async function startSalesTicketListener() {
           );
 
           if (buttonMessage) {
-            console.log("Open new sale ticket button already exists");
+            console.log("Button already exists");
             return;
           }
 
@@ -86,97 +86,103 @@ export async function startSalesTicketListener() {
     type InteractionId = "create-ticket-button" | "close-salesman-ticket";
 
     client.on(Events.InteractionCreate, async (interaction: Interaction) => {
-      if (!interaction.isButton()) return;
+      try {
+        if (interaction.guildId !== envs.SERVER_ID) return;
 
-      const interactionId = interaction.customId as InteractionId;
+        if (!interaction.isButton()) return;
 
-      // Check if custom ID is the one we're expecting
-      if (
-        interactionId !== "close-salesman-ticket" &&
-        interactionId !== "create-ticket-button"
-      )
-        return;
+        const interactionId = interaction.customId as InteractionId;
 
-      if (interactionId === "create-ticket-button") {
-        const openSalesChannels = await getOpenSalesChannelsBySalesman(
-          interaction.user.id,
-          interaction.guild
-        );
-
-        if (openSalesChannels >= 30) {
-          await interaction.reply({
-            content: `⚠️ Alcanzaste el límite de tickets abiertos al mismo tiempo (${openSalesChannels}). Contacta a un moderador si necesitas ayuda o crees que es un error.`,
-            ephemeral: true,
-          });
+        // Check if custom ID is the one we're expecting
+        if (
+          interactionId !== "close-salesman-ticket" &&
+          interactionId !== "create-ticket-button"
+        )
           return;
-        }
 
-        const category = interaction.guild!.channels.cache.get(
-          envs.OPEN_SALES_CATEGORY_ID
-        );
+        // Only call deferReply once here for both cases
+        await interaction.deferReply({
+          ephemeral: true,
+        });
 
-        if (category && category.type === ChannelType.GuildCategory) {
-          // Convert the Collection to an array of PermissionOverwrites
-          const categoryPermissions = Array.from(
-            category.permissionOverwrites.cache.values()
+        if (interactionId === "create-ticket-button") {
+          const openSalesChannels = await getOpenSalesChannelsBySalesman(
+            interaction.user.id,
+            interaction.guild
           );
 
-          // Create a new array for channel permissions, starting with category permissions
-          const channelPermissions: any = [...categoryPermissions];
+          if (openSalesChannels >= 30) {
+            await interaction.editReply({
+              content: `⚠️ Alcanzaste el límite de tickets abiertos al mismo tiempo (${openSalesChannels}). Contacta a un moderador si necesitas ayuda o crees que es un error.`,
+            });
+            return;
+          }
 
-          // Add specific permission for the user who clicked the button
-          channelPermissions.push({
-            id: interaction.user.id,
-            allow: [PermissionsBitField.Flags.ViewChannel],
+          const category = interaction.guild!.channels.cache.get(
+            envs.OPEN_SALES_CATEGORY_ID
+          );
+
+          if (category && category.type === ChannelType.GuildCategory) {
+            // Convert the Collection to an array of PermissionOverwrites
+            const categoryPermissions = Array.from(
+              category.permissionOverwrites.cache.values()
+            );
+
+            // Create a new array for channel permissions, starting with category permissions
+            const channelPermissions: any = [...categoryPermissions];
+
+            // Add specific permission for the user who clicked the button
+            channelPermissions.push({
+              id: interaction.user.id,
+              allow: [PermissionsBitField.Flags.ViewChannel],
+            });
+
+            // Create the new channel with the adjusted permissions
+            const newChannel = await interaction.guild!.channels.create({
+              name: `ticket-${interaction.user.id}`,
+              type: ChannelType.GuildText,
+              parent: category.id,
+              permissionOverwrites: channelPermissions,
+            });
+
+            await interaction.editReply({
+              content: `Channel created: ${newChannel}`,
+            });
+          } else {
+            await interaction.editReply({
+              content: "Category not found or is not a category type",
+            });
+          }
+        } else if (interactionId === "close-salesman-ticket") {
+          // Get pinned messages
+          const pinnedMessages =
+            await interaction.channel!.messages.fetchPinned();
+
+          // Get first pinned message
+          // From first pinned message, get the sales ID by splitting the content by ":" and getting the second part
+          const saleId = pinnedMessages.first()?.content.split(":")[1].trim()!;
+
+          // Get interaction channel
+          const channel = interaction.channel as TextChannel;
+
+          const salesService = await getSalesService();
+
+          await salesService.updateSale(saleId, {
+            transactionalStatus: "ticket-archived",
           });
 
-          // Create the new channel with the adjusted permissions
-          const newChannel = await interaction.guild!.channels.create({
-            name: `ticket-${interaction.user.id}`,
-            type: ChannelType.GuildText,
-            parent: category.id,
-            permissionOverwrites: channelPermissions,
+          await interaction.editReply({
+            content: "Cerrando ticket...",
           });
 
-          await interaction.reply({
-            content: `Channel created: ${newChannel}`,
-            ephemeral: true,
-          });
-        } else {
-          await interaction.reply({
-            content: "Category not found or is not a category type",
-            ephemeral: true,
-          });
+          // Await 7 seconds
+          await new Promise((resolve) => setTimeout(resolve, 7000));
+
+          // Delete the channel
+          await channel.delete();
         }
-      } else if (interactionId === "close-salesman-ticket") {
-        await interaction.deferReply({ ephemeral: true }); // Defer reply to avoid timeout
-
-        // Get pinned messages
-        const pinnedMessages =
-          await interaction.channel!.messages.fetchPinned();
-
-        // Get first pinned message
-        // From first pinned message, get the sales ID by splitting the content by ":" and getting the second part
-        const saleId = pinnedMessages.first()?.content.split(":")[1].trim()!;
-
-        // Get interaction channel
-        const channel = interaction.channel as TextChannel;
-
-        const salesService = await getSalesService();
-
-        await salesService.updateSale(saleId, {
-          transactionalStatus: "ticket-archived",
-        });
-
-        await interaction.editReply({
-          content: "Cerrando ticket...",
-        });
-
-        // Await 7 seconds
-        await new Promise((resolve) => setTimeout(resolve, 7000));
-
-        // Delete the channel
-        await channel.delete();
+      } catch (error) {
+        console.error("Error processing interaction:", error);
       }
     });
   } catch (error) {

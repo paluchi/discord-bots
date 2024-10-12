@@ -18,4 +18,4 @@ RUN pnpm install
 # EXPOSE 3000
 
 # Start Redis server and run the bot
-CMD ["sh", "-c", "redis-server --daemonize yes && cd apps/platform/apps/bots && pnpm run tickets-bot"]
+CMD ["sh", "-c", "redis-server --daemonize yes && cd apps/platform/apps/bots && pnpm run tickets-bot .env.gold_hash"]

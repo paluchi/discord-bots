@@ -105,7 +105,11 @@ export class DiscordListener {
               );
               newData = await data(retrievedData);
             }
-            this.stateManager.updateChatData(channel.id, newData, options);
+            await this.stateManager.updateChatData(
+              channel.id,
+              newData,
+              options
+            );
           },
         };
 

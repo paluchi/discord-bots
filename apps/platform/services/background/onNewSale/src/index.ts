@@ -122,7 +122,10 @@ ${sale.products
   await buttonsMessage.pin();
 };
 
-export const onNewSale = functions.firestore
+// onNewSale_BT // bring tech
+// onNewSale_GH // gold hash
+
+export const onNewSale_GH = functions.firestore
   .document("sales/{saleId}")
   .onCreate(async (snap, context) => {
     try {
